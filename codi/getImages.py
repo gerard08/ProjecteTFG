@@ -1,16 +1,5 @@
 import icgc
 
-x0 = 41.34
-y0 = 0.52
-
-step = 0.08
-
-x1 = x0 + step
-y1 = y0 + step
-
-xy0 = (x0,y0)
-xy1 = (x1,y1)
-
 
 
 def getImages(xy0, xy1, n):
@@ -25,17 +14,29 @@ def getImages(xy0, xy1, n):
     file.close()
     return 'OK'
 
-for i in range(10):
-    a = x1 + step
-    x0 = x1
-    x1 = a
+if __name__ == '__main__':
+    x0 = 41.34
+    y0 = 0.52
 
-    for j in range(10):
-        b = y1 + step
-        y0 = y1
-        y1 = b
+    step = 0.01
 
-        xy0 = (x0,y0)
-        xy1 = (x1,y1)
+    x1 = x0 + step
+    y1 = y0 + step
 
-        print(getImages(xy0, xy1, j+(10*i)))
+    xy0 = (x0,y0)
+    xy1 = (x1,y1)
+        
+    for i in range(10):
+        a = x1 + step
+        x0 = x1
+        x1 = a
+
+        for j in range(10):
+            b = y1 + step
+            y0 = y1
+            y1 = b
+
+            xy0 = (x0,y0)
+            xy1 = (x1,y1)
+
+            print(getImages(xy0, xy1, j+(10*i)))
