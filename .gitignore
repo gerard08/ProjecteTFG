@@ -1,9 +1,10 @@
 __pycache__
 img
-img/*
+img/.
 .vscode
 rebut.png
 relleu.png
 /codi/__pycache__
 3d_1
+dataset
 informe

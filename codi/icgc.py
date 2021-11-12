@@ -16,12 +16,21 @@ def getImage(x0, y0, x1, y1, width, height, type = None):
     if type == 'relleu':
         url = 'https://geoserveis.icgc.cat/icgc_mdt2m/wms/service?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=MET2m&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=FALSE&CRS=EPSG:25831&BBOX='
     else:
-        url = 'https://geoserveis.icgc.cat/icgc_sentinel2/wms/service?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=sen2rgb_202012&STYLES=&FORMAT=image/jpeg&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:25831&BBOX='
-    #url = 'https://www.ign.es/wms-inspire/pnoa-ma?REQUEST=GetMap&VERSION=1.1.0&SERVICE=WMS&SRS=EPSG:25831&BBOX='
-    #end = '&LAYERS=OI.OrthoimageCoverage&STYLES=&FORMAT=JPEG&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&EXCEPTION=INIMAGE'
-
+        url = 'https://geoserveis.icgc.cat/icgc_sentinel2/wms/service?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=sen2rgb_201608&STYLES=&FORMAT=image/jpeg&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:25831&BBOX='
+    
     query = url + str(x0) + ',' + str(y0) + ',' + str(x1) + ',' + str(y1) + '&WIDTH=' + str(width) + '&HEIGHT=' + str(height)
+    try:
+        x = requests.get(query)
+        return x.content
+    except:
+        print("ERROR")
+
+def getImageHD(x0, y0, x1, y1, width, height, _ = None):
+    url = 'https://geoserveis.icgc.cat/icc_ortohistorica/wms/service?REQUEST=GetMap&VERSION=1.1.0&SERVICE=WMS&SRS=EPSG:23031&BBOX='
+    end = '&LAYERS=orto25c2016&STYLES=&FORMAT=JPEG&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&EXCEPTION=INIMAGE'
+    query = url + str(x0) + ',' + str(y0) + ',' + str(x1) + ',' + str(y1) + '&WIDTH=' + str(width) + '&HEIGHT=' + str(height) + end
+
     x = requests.get(query)
 
-    print(x)
+    #print(x)
     return x.content
