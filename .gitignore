@@ -1,4 +1,9 @@
-__pycache__
-/codi/__pycache__
+.vscode
 3d_1
+codi/__pycache__
 informe
+minidataset
+minidataset.rar
+codi/Nets/definitiveRGB/__pycache__
+codi/Nets/runs
+codi/Nets/definitiveRGB/runs
