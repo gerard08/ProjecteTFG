@@ -1,5 +1,6 @@
 .vscode
-3d_1
+3d_1/img/0.jpg
+3d_1/img/0sat.jpg
 codi/__pycache__
 informe
 minidataset
@@ -7,3 +8,4 @@ minidataset.rar
 codi/Nets/definitiveRGB/__pycache__
 codi/Nets/runs
 codi/Nets/definitiveRGB/runs
+minidatasetD
