@@ -1,37 +1,57 @@
+
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 export { camera };
+
 camera.position.z = 25;
 
 document.onkeydown = checkKey;
 
-function checkKey(e) {
+var x = 0, y = 0, z = 0;
+var zoom = 1;
+const step = 0.1;
 
+const speed = 0.2;
+function checkKey(e) {
+   
     e = e || window.event;
 
     if (e.keyCode == '87') {
         // W
-        camera.position.y = camera.position.y + 0.2
+        camera.position.y = camera.position.y + speed * zoom;
+        y += speed * zoom;
     }
     else if (e.keyCode == '83') {
         // S
-        camera.position.y = camera.position.y - 0.2
+        camera.position.y = camera.position.y - speed * zoom;
+        y -= speed * zoom;
     }
     else if (e.keyCode == '65') {
        // A
-       camera.position.x = camera.position.x - 0.2
+       camera.position.x = camera.position.x - speed*zoom;
+       x -= speed * zoom;
     }
     else if (e.keyCode == '68') {
        // D
-       camera.position.x = camera.position.x + 0.2
+       camera.position.x = camera.position.x + speed*zoom;
+       x += speed * zoom;
     }
     else if (e.keyCode == '69') {
         // E
-        camera.position.z = camera.position.z - 0.2
+        if(z - speed > -24.5)
+        {
+         camera.position.z = camera.position.z - speed;
+         z -= speed;
+         zoom -= 0.007;
+        }
+        
         //console.log(camera.position.z)
      }
      else if (e.keyCode == '81') {
         // Q
-        camera.position.z = camera.position.z + 0.2
+
+        camera.position.z = camera.position.z + speed;
+        z += speed;
+        zoom += 0.007;
         //console.log(camera.position.z)
      }
      else if (e.keyCode == '38') {
@@ -50,4 +70,7 @@ function checkKey(e) {
          // right
          camera.rotation.y = camera.rotation.y - 0.02;
       }
+
+      console.log(x,y,z);
+      console.log(zoom);
 }
