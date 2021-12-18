@@ -1,24 +1,46 @@
 import multiprocessing
 import socket
+from icgc import calculaImatge
 
 def tracta(connection, address):
     try:
         print("Connected %r at %r", connection, address)
-        data = connection.recv(4)
-        if data == "":
+        
+        ############REBEM PARÀMETRES################
+        #rebem la x
+        x = float(connection.recv(6))
+        if x == "":
             print("Socket closed remotely")
-        print("Received data %r", data)
+        #print("Received data %r", x)
 
-        data = connection.recv(4)
-        if data == "":
+        #rebem la y
+        y = float(connection.recv(6))
+        if y == "":
             print("Socket closed remotely")
-        print("Received data %r", data)
+        #print("Received data %r", data)
 
-        connection.sendall(b'tot ok bro :)')
+        #rebem el step
+        step = float(connection.recv(3))
+        if step == "":
+            print("Socket closed remotely")
+        #print("Received data %r", data)
+
+        #rebem la direccio
+        direccio = connection.recv(1)
+        if direccio == "":
+            print("Socket closed remotely")
+        #print("Received data %r", data)
+        
+        ###########CALCULEM IMATGE I LA RETORNEM############
+
+        img = calculaImatge(x,y,step,direccio)
+        
+        connection.sendall(img)
         print("Sent data")
     except:
         print("Problem handling request")
     finally:
+        del x,y,step,direccio
         print("Closing socket")
         connection.close()
 

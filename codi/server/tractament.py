@@ -4,6 +4,16 @@ import torch
 import numpy as np
 from scipy.ndimage import median_filter
 import icgc
+import time
+
+
+#importem i creem la UNet
+uo = UNetOperations()
+unet = uo.loadUnet('C:/Users/ger-m/Desktop/UNI/4t/TFG/codi/Nets/definitiveRGB/down/model_weights.pth')
+
+#definim la gràfica
+dev = uo.getDevice()
+unet.to(dev)
 
 class Imatge:
 
@@ -24,21 +34,25 @@ class Imatge:
         r = np.transpose(i,(1,2,0))
         r = median_filter(r, size=3)
         return r
-        
-    
+
+
+def tractaImatges(img):
+
+    i = Imatge(img)
+    it = i.toTensor().to(device = dev, dtype=torch.float)
+    o = unet(it)
+    #del unet
+    i = Imatge(o)
+    #q.put(i.fromTensor())
+    del o, it
+    return i.fromTensor()
+
+
 def winSuperRes(im, div = 4):
-
-    uo = UNetOperations()
-    unet = uo.loadUnet('C:/Users/ger-m/Desktop/UNI/4t/TFG/codi/Nets/definitiveRGB/down/model_weights.pth')
-
-    dev = uo.getDevice()
-    unet.to(dev)
-
     #comprovem que les imatges siguin cuadrades
     assert(im.shape[0] == im.shape[1])
-
-    s = int(len(im)/div)
     imgs = []
+    s = int(len(im)/div)
     sj = s
     si = s
     for i in range(div):
@@ -49,16 +63,11 @@ def winSuperRes(im, div = 4):
         si += s
         sj = s
 
-    processed_imgs = []
+    from multiprocessing import Pool
+    p = Pool(processes=None)
+    processed_imgs = p.map(tractaImatges, imgs)
 
-    for img in imgs:
-        i = Imatge(img)
-        it = i.toTensor().to(device = dev, dtype=torch.float)
-        o = unet(it)
-        i = Imatge(o)
-        processed_imgs.append(i.fromTensor())
-        del o, it, i
-
+    #montem la imatge
     n = 0
     for j in range(div):
         for i in range(div):
@@ -77,9 +86,17 @@ def winSuperRes(im, div = 4):
 
 def getImages(xy0, xy1):
     (xy0,xy1) = icgc.calculateCoord(xy0, xy1)
-    im = icgc.getImage(xy0[0], xy0[1], xy1[0], xy1[1], 2400, 2400)
+    im = icgc.getImage(xy0[0], xy0[1], xy1[0], xy1[1], 1920, 1920)
 
     nparr = np.frombuffer(im, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    res = winSuperRes(img, div=10)
+    res = winSuperRes(img, div=8)
     return res
+
+
+if __name__ == '__main__':
+    t0 = time.time()
+    img = getImages((42.169, 1.453),(42.469, 1.753))
+    t1 = time.time()
+    print(t1-t0)
+    cv2.imwrite('result.jpg', img)

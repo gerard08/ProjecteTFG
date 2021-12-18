@@ -83,7 +83,7 @@ if __name__ == '__main__':
     x0 = 41.56768
     y0 = 1.997867
 
-    step = 0.1
+    step = 0.3
 
     x1 = x0 + step
     y1 = y0 + step
