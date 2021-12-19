@@ -65,6 +65,50 @@
 
         //return img;
     }
+    function hexToBase64(str) {
+        str = str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ");
+        //console.log(str);
+        str = _arrayBufferToBase64(str);
+        //console.log('str ' + str);
+        return str;
+     }
+     function _arrayBufferToBase64( buffer ) {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        //return window.btoa( binary );
+        //console.log(binary);
+        return btoa(binary);
+      
+    }
+ 
+
+    function loadTerrainbinary(imatge, relleu, position)
+    {
+
+        //console.log('terrain' + imatge);
+         var texture = new THREE.Texture();
+        //  var im = imatge;
+         var image = new Image();
+         //console.log(im);
+         image.onload = function() { 
+             texture.image = image; 
+             texture.needsUpdate = true; 
+
+            var geometry = new THREE.PlaneGeometry(10,10,10,10);
+            var material = new THREE.MeshBasicMaterial( { map: texture } );
+            var plane = new THREE.Mesh( geometry, material );
+            plane.position.copy(position);
+            console.log('jiji');
+            scene.add(plane);
+         };
+         image.src = "data:image/jfif;base64,"+hexToBase64(imatge);
+
+    }
 
 
- export {loadTerrain};
+
+ export {loadTerrain, loadTerrainbinary};

@@ -44,8 +44,9 @@ def tractaImatges(img):
     #del unet
     i = Imatge(o)
     #q.put(i.fromTensor())
-    del o, it
-    return i.fromTensor()
+    img = i.fromTensor()
+    del o, it,i
+    return img
 
 
 def winSuperRes(im, div = 4):
@@ -64,8 +65,10 @@ def winSuperRes(im, div = 4):
         sj = s
 
     from multiprocessing import Pool
-    p = Pool(processes=None)
+    p = Pool(processes=2)
     processed_imgs = p.map(tractaImatges, imgs)
+    # for i in imgs:
+    #     tractaImatges(i)
 
     #montem la imatge
     n = 0
@@ -86,11 +89,11 @@ def winSuperRes(im, div = 4):
 
 def getImages(xy0, xy1):
     (xy0,xy1) = icgc.calculateCoord(xy0, xy1)
-    im = icgc.getImage(xy0[0], xy0[1], xy1[0], xy1[1], 1920, 1920)
+    im = icgc.getImage(xy0[0], xy0[1], xy1[0], xy1[1], 1440, 1440)
 
     nparr = np.frombuffer(im, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    res = winSuperRes(img, div=8)
+    res = winSuperRes(img, div=6)
     return res
 
 

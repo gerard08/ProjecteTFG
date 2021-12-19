@@ -1,17 +1,35 @@
 from tractament import getImages
 from multiprocessing import Pool
+from cv2 import imwrite
 PATH = '3d/img/'
 
-xy0 = [(41.169, 1.053), (41.169, 1.553), (41.169, 2.053),
-(41.569, 1.053), (41.569, 1.553), (41.569, 2.053),
-(42.069, 1.053), (42.069, 1.553), (42.069, 2.053)]
+STEP = 0.2
+th = 0.001
 
-xy1 = [(41.569, 1.553), (41.569, 2.053), (41.569, 2.553),
-(42.069, 1.553), (42.069, 2.053), (42.069, 2.553),
-(42.569, 1.553), (42.569, 2.053), (42.569, 2.553)]
+def getxy1(xy):
+    return (round(xy[0]+STEP,5),round(xy[1]+STEP,5))
+
+
+
+x0 = 41.16915
+y0 = 1.053150
 #i = [x for x in range(9)]
 if __name__ == '__main__':
-    p = Pool()
-    [p.apply(getImages, args=(xy0[i], xy1[i], i,)) for i in range(len(xy0))]
-    getImages(xy0[0], xy1[0], 0)
+    nrowcols = 5
+    nimages = 0
+    x = x0
+    y = y0
+    for i in range(nrowcols):
+        for j in range(nrowcols):
+            xy0 = (round(x,5),round(y,5))
+            xy1 = getxy1(xy0)
+            im = getImages(xy0,xy1)
+            # imwrite(PATH + str(nimages) + '_sat.jpg', im)
+            print(xy0,xy1)
+            print(nimages)
+            y+=STEP+th
+            nimages+=1
+        y = y0
+        x+=STEP+th
+
     print("DONE!!")

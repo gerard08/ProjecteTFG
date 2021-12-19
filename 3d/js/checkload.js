@@ -1,21 +1,27 @@
-var tamanyImatge = 6.65;
-var minXcoord = 42.169, minYcoord = 1.453, maxXcoord = 43.569, maxYcoord = 2.953, step=0.4;
+var tamanyImatge = 10;
+var minXcoord = 41.169, minYcoord = 1.053, maxXcoord = 42.173, maxYcoord = 2.057, step=0.2;
 //var minX = -10, minY = -10, maxX = 10, maxY = 10;
-
-function getImage(x, y, step, direction)
+import {loadTerrainbinary} from './terrain.js';
+function getImage(x, y, step, v)
 {
+    var result;
     jQuery.ajax(
         {
             type: "POST",
             url: '../php/callServer.php',
-            // dataType: 'json',
+            async: false,
+            //dataType: 'string',
             // data: {x0:x ,y0:y, step:step},
-            data: "x0="+ truncate(x) +"& y0="+ truncate(y) +"& step="+ step + "& direction=" +direction, 
+            data: "x0="+ truncate(x) +"& y0="+ truncate(y) +"& step="+ step +"& v="+ v,// + "& direction=" +direction, 
             success: function(data){  
-                console.log(data);
+                //console.log(data);
+                result = data;
             }
         }
     );
+    //loadTerrainbinary(result, 0, v);
+    //console.log(result);
+    //return result;
 }
 
 
@@ -25,7 +31,7 @@ function truncate(number, decimals = 3)
     number = number.slice(0, (number.indexOf("."))+decimals+1); //With 3 exposing the hundredths place
     return Number(number); //If you need it back as a Number
 }
-function callLoad(orientation, end, varEditar)
+function callLoad(orientation, end, varEditar, var2)
 {
     //vertical
     if(orientation == 1)
@@ -33,23 +39,34 @@ function callLoad(orientation, end, varEditar)
         //dreta
         if(end)
         {
+            var maxX = varEditar;
+            var minY = var2;
             //calculo coordenades fixes
             var x0 = maxXcoord;
             var x1 = maxXcoord + step;
-
+            var noux = maxX + 10;
+            var nouy = minY;
             //calculo valors de y
+            // var img = getImage(x0, nouy, step, orientation);
+            // loadTerrainbinary(img, 0, new THREE.Vector3(0,0,0));//new THREE.Vector3(-noux,nouy,1));
+
             for(var y=minYcoord; y + step <= maxYcoord + 0.01; y+=step )
             {
-                var y1 = y + step;
+                //var y1 = y + step;
                 //console.log(x0, x1, truncate(y), truncate(y1));
-                getImage(x0, y, step, orientation);
+                var v = new THREE.Vector3(-noux, nouy, 0);
+                // var worker = new Worker('/js/workerJob.js');
+                // worker.postMessage({ "args": [x0, y, step, v] });
+                getImage(x0, y, step, orientation, v);
+                //console.log('imatge ' + img);
+                // loadTerrainbinary(img, 0, new THREE.Vector3(-noux,nouy,0));
+                nouy += 10;
             }
-
             //actualitzem valors màxims
             maxXcoord = x1;
-            varEditar += tamanyImatge;
+            maxX += tamanyImatge;
             console.log('calculs imatges dreta actualitzats');
-            return varEditar;
+            return maxX;
         }
         //esquerra
         else
@@ -64,6 +81,7 @@ function callLoad(orientation, end, varEditar)
                 var y1 = y+step;
                 //console.log(x0,x1,truncate(y),truncate(y1));
                 getImage(x0, y, step, orientation);
+                console.log('aquest no');
 
             }
 
@@ -87,13 +105,14 @@ function checkload(x,y,minX,minY,maxX,maxY)
     //correctament
     if(maxX - x < 1)
     {
-        maxX = callLoad(1, true, maxX);
+        maxX = callLoad(1, true, maxX, minY);
     }
     if(minX - x > -1)
     {
-        minX = callLoad(1,false, minX);
+        //minX = callLoad(1,false, minX);
     }
     return [minX, minY, maxX, maxY]
 }
 
-export {checkload};
+
+export {checkload, getImage};

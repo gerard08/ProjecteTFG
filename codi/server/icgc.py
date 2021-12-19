@@ -1,15 +1,14 @@
 import requests
 from pyproj import Proj, transform
-SIZE = 2400
+SIZE = 1440
 
-def calculaImatge(x, y, step, direction):
+def calculaImatge(x, y, step):
     xy0 = (x,y)
-    xy1 = (x+step, y)
-    if direction:
-        xy1 = (x, y+step)
-    
+    xy1 = (x+step, y+step)
+
     (xy0,xy1) = calculateCoord(xy0, xy1)
     return getImage(xy0[0], xy0[1], xy1[0], xy1[1], SIZE, SIZE)
+
 
 
 def calculateCoord(xy0, xy1):

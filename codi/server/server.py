@@ -25,22 +25,28 @@ def tracta(connection, address):
             print("Socket closed remotely")
         #print("Received data %r", data)
 
-        #rebem la direccio
-        direccio = connection.recv(1)
-        if direccio == "":
-            print("Socket closed remotely")
-        #print("Received data %r", data)
+        # #rebem la direccio
+        # direccio = connection.recv(1)
+        # if direccio == "":
+        #     print("Socket closed remotely")
+        # #print("Received data %r", data)
         
         ###########CALCULEM IMATGE I LA RETORNEM############
 
-        img = calculaImatge(x,y,step,direccio)
-        
+        img = calculaImatge(x,y,step)#,direccio)
+        import cv2
+        file = open('original.jfif', 'wb')
+        file.write(img)
+        file.close()
+        import sys
+        myint = 12
+        print(sys.getsizeof(img))
         connection.sendall(img)
         print("Sent data")
     except:
         print("Problem handling request")
     finally:
-        del x,y,step,direccio
+        #del x,y,step
         print("Closing socket")
         connection.close()
 

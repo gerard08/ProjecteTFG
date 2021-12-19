@@ -106,11 +106,11 @@
 						break;
 
 					case 'KeyQ':
-						this.moveState.rollLeft = 0.2;
+						this.moveState.rollLeft = 0.4;
 						break;
 
 					case 'KeyE':
-						this.moveState.rollRight = 0.2;
+						this.moveState.rollRight = 0.4;
 						break;
 
 				}
