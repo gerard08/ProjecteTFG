@@ -39,7 +39,7 @@ function hex2float($strHex) {
     //echo "OK.<br/>";  
   }  
     
-  $in = $x0;  
+  $in = $x0; 
   socket_write($socket, $in, strlen($in));  
   $in = $y0;  
   socket_write($socket, $in, strlen($in));  
@@ -62,10 +62,10 @@ function hex2float($strHex) {
   //$out = strip_tags($out);
   //echo base64_decode($out); 
   //file_put_contents('foto.jfif', $out);
-  //echo $out;
+  echo $out;
  ?>  
- <script type="text/javascript" src="js/terrain.js">
+ <!-- <script type="text/javascript" src="js/terrain.js">
    loadTerrainBinary();
-   </script>
+   </script> -->
 
      

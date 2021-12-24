@@ -21,7 +21,7 @@ function getImage(x, y, step, v)
     );
     //loadTerrainbinary(result, 0, v);
     //console.log(result);
-    //return result;
+    return result;
 }
 
 
@@ -54,12 +54,12 @@ function callLoad(orientation, end, varEditar, var2)
             {
                 //var y1 = y + step;
                 //console.log(x0, x1, truncate(y), truncate(y1));
-                var v = new THREE.Vector3(-noux, nouy, 0);
+                var v = new THREE.Vector3(noux, nouy, 0);
                 // var worker = new Worker('/js/workerJob.js');
                 // worker.postMessage({ "args": [x0, y, step, v] });
-                getImage(x0, y, step, orientation, v);
+                var img = getImage(x0, y, step, orientation, v);
                 //console.log('imatge ' + img);
-                // loadTerrainbinary(img, 0, new THREE.Vector3(-noux,nouy,0));
+                loadTerrainbinary(img, 0, new THREE.Vector3(noux,nouy,0));
                 nouy += 10;
             }
             //actualitzem valors màxims

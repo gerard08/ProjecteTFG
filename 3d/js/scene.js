@@ -109,8 +109,8 @@ function animate() {
     secs = (now - lt) / 1000;
     lt = now;
     controls.update(1 * secs);
-    skybox.rotation.x += 0.00001;
-    skybox.rotation.y += 0.00001;
+    skybox.rotation.x += 0.00007;
+    skybox.rotation.y += 0.00003;
     x = camera.position.x;
     y = camera.position.y;
     [minX, minY, maxX, maxY] = checkload(x, y, minX, minY, maxX, maxY);
