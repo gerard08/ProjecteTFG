@@ -15,8 +15,10 @@ class block(nn.Module):
         return x
 
 class discriminator(nn.Module):
-    def __init__(self, in_cn = 3):
+    def __init__(self, in_cn = 3, batch = 3):
         super(discriminator, self).__init__()
+        self.batch = batch
+
         self.conv1 = nn.Conv2d(in_channels=in_cn, out_channels=64, kernel_size=3, stride=1, padding=0)
         self.leaky = nn.LeakyReLU()
         self.block1 = block(64, 64, 2)
@@ -40,7 +42,7 @@ class discriminator(nn.Module):
         x = self.block5(x)
         x = self.block6(x)
         x = self.block7(x)
-        x = x.view(1, -1)
+        x = x.view(self.batch, -1)
         x = self.dense1(x)
         x = self.leaky(x)
         x = self.dense2(x)
@@ -58,11 +60,11 @@ class Operations:
     def getDevice(self):
         use_cuda = torch.cuda.is_available()
         device = torch.device("cuda:0" if use_cuda else "cpu")
-        #torch.backends.cudnn.benchmark = True
+        torch.backends.cudnn.benchmark = True
         return device
 
-    def createNet(self, n_classes = None):
-        self.net = discriminator(3)
+    def createNet(self, n_classes = None, batches = 3):
+        self.net = discriminator(3, batches)
         return self.net
 
 

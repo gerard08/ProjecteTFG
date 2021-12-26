@@ -2,31 +2,39 @@ PATH = 'C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset/'
 LISTFILE = 'C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset/listfile.txt'
 
 import numpy as np
+# from numpy.core.defchararray import index
 from torch.utils import data
 import cv2
 
+def createDict(lst):
+    l0 = ['sd/' + x for x in lst]
+    l1 = ['hd/' + x for x in lst]
+
+    final = {}
+    for i in range(len(l0)):
+        final[l0[i]] = 0
+        final[l1[i]] = 1
+
+    return final
 
 class MyDataset(data.Dataset):
     def __init__(self, lst, path):
-        self.lst = lst
         self.path = path
+        self.dict = createDict(lst)
+        self.keys = list(self.dict)
 
     def __getitem__(self, index):
         
-        imsd = 'sd/' + self.lst[index]
-        imhd = 'hd/' + self.lst[index]
-        
-        x = cv2.imread(self.path + imsd)
-        y = cv2.imread(self.path + imhd)
+        x = cv2.imread(self.path + self.keys[index])
+        y = self.dict[self.keys[index]]
 
         x = np.transpose(x,(2,0,1))
-        y = np.transpose(y,(2,0,1))
 
-        #return x, y
         return {'img':x, 'gth':y}
 
     def __len__(self):
-        return len(self.lst)
+        return len(self.keys)
+
 
 def createDatasets(type, batch):
     f = open(LISTFILE, 'r')
