@@ -29,39 +29,39 @@ var r = 1366/768;
 function loadInitialImages()
 {
     //dalt2
-    loadTerrain('../img/20_sat.jpg', '../img/0.jpg', new THREE.Vector3(-20,20,0));
-    loadTerrain('../img/21_sat.jpg', '../img/0.jpg', new THREE.Vector3(-10,20,0));
-    loadTerrain('../img/22_sat.jpg', '../img/0.jpg', new THREE.Vector3(0,20,0));
-    loadTerrain('../img/23_sat.jpg', '../img/0.jpg', new THREE.Vector3(10,20,0));
-    loadTerrain('../img/24_sat.jpg', '../img/0.jpg', new THREE.Vector3(20,20,0));
+    loadTerrain('../img/sat/20_sat.jpg', '../img/rel/20_rel.jpg', new THREE.Vector3(-20,20,0));
+    loadTerrain('../img/sat/21_sat.jpg', '../img/rel/21_rel.jpg', new THREE.Vector3(-10,20,0));
+    loadTerrain('../img/sat/22_sat.jpg', '../img/rel/22_rel.jpg', new THREE.Vector3(0,20,0));
+    loadTerrain('../img/sat/23_sat.jpg', '../img/rel/23_rel.jpg', new THREE.Vector3(10,20,0));
+    loadTerrain('../img/sat/24_sat.jpg', '../img/rel/24_rel.jpg', new THREE.Vector3(20,20,0));
 
     //dalt1
-    loadTerrain('../img/15_sat.jpg', '../img/0.jpg', new THREE.Vector3(-20,10,0));
-    loadTerrain('../img/16_sat.jpg', '../img/0.jpg', new THREE.Vector3(-10,10,0));
-    loadTerrain('../img/17_sat.jpg', '../img/0.jpg', new THREE.Vector3(0,10,0));
-    loadTerrain('../img/18_sat.jpg', '../img/0.jpg', new THREE.Vector3(10,10,0));
-    loadTerrain('../img/19_sat.jpg', '../img/0.jpg', new THREE.Vector3(20,10,0));
+    loadTerrain('../img/sat/15_sat.jpg', '../img/rel/15_rel.jpg', new THREE.Vector3(-20,10,0));
+    loadTerrain('../img/sat/16_sat.jpg', '../img/rel/16_rel.jpg', new THREE.Vector3(-10,10,0));
+    loadTerrain('../img/sat/17_sat.jpg', '../img/rel/17_rel.jpg', new THREE.Vector3(0,10,0));
+    loadTerrain('../img/sat/18_sat.jpg', '../img/rel/18_rel.jpg', new THREE.Vector3(10,10,0));
+    loadTerrain('../img/sat/19_sat.jpg', '../img/rel/19_rel.jpg', new THREE.Vector3(20,10,0));
 
     //mitg
-    loadTerrain('../img/10_sat.jpg', '../img/0.jpg', new THREE.Vector3(-20,0,0));
-    loadTerrain('../img/11_sat.jpg', '../img/0.jpg', new THREE.Vector3(-10,0,0));
-    loadTerrain('../img/12_sat.jpg', '../img/0.jpg', new THREE.Vector3(0,0,0));
-    loadTerrain('../img/13_sat.jpg', '../img/0.jpg', new THREE.Vector3(10,0,0));
-    loadTerrain('../img/14_sat.jpg', '../img/0.jpg', new THREE.Vector3(20,0,0));
+    loadTerrain('../img/sat/10_sat.jpg', '../img/rel/10_rel.jpg', new THREE.Vector3(-20,0,0));
+    loadTerrain('../img/sat/11_sat.jpg', '../img/rel/11_rel.jpg', new THREE.Vector3(-10,0,0));
+    loadTerrain('../img/sat/12_sat.jpg', '../img/rel/12_rel.jpg', new THREE.Vector3(0,0,0));
+    loadTerrain('../img/sat/13_sat.jpg', '../img/rel/13_rel.jpg', new THREE.Vector3(10,0,0));
+    loadTerrain('../img/sat/14_sat.jpg', '../img/rel/14_rel.jpg', new THREE.Vector3(20,0,0));
 
     //baix1
-    loadTerrain('../img/5_sat.jpg', '../img/0.jpg', new THREE.Vector3(-20,-10,0));
-    loadTerrain('../img/6_sat.jpg', '../img/0.jpg', new THREE.Vector3(-10,-10,0));
-    loadTerrain('../img/7_sat.jpg', '../img/0.jpg', new THREE.Vector3(0,-10,0));
-    loadTerrain('../img/8_sat.jpg', '../img/0.jpg', new THREE.Vector3(10,-10,0));
-    loadTerrain('../img/9_sat.jpg', '../img/0.jpg', new THREE.Vector3(20,-10,0));
+    loadTerrain('../img/sat/5_sat.jpg', '../img/rel/5_rel.jpg', new THREE.Vector3(-20,-10,0));
+    loadTerrain('../img/sat/6_sat.jpg', '../img/rel/6_rel.jpg', new THREE.Vector3(-10,-10,0));
+    loadTerrain('../img/sat/7_sat.jpg', '../img/rel/7_rel.jpg', new THREE.Vector3(0,-10,0));
+    loadTerrain('../img/sat/8_sat.jpg', '../img/rel/8_rel.jpg', new THREE.Vector3(10,-10,0));
+    loadTerrain('../img/sat/9_sat.jpg', '../img/rel/9_rel.jpg', new THREE.Vector3(20,-10,0));
 
     //baix2
-    loadTerrain('../img/0_sat.jpg', '../img/0.jpg', new THREE.Vector3(-20,-20,0));
-    loadTerrain('../img/1_sat.jpg', '../img/0.jpg', new THREE.Vector3(-10,-20,0));
-    loadTerrain('../img/2_sat.jpg', '../img/0.jpg', new THREE.Vector3(0,-20,0));
-    loadTerrain('../img/3_sat.jpg', '../img/0.jpg', new THREE.Vector3(10,-20,0));
-    loadTerrain('../img/4_sat.jpg', '../img/0.jpg', new THREE.Vector3(20,-20,0));
+    loadTerrain('../img/sat/0_sat.jpg', '../img/rel/0_rel.jpg', new THREE.Vector3(-20,-20,0));
+    loadTerrain('../img/sat/1_sat.jpg', '../img/rel/1_rel.jpg', new THREE.Vector3(-10,-20,0));
+    loadTerrain('../img/sat/2_sat.jpg', '../img/rel/2_rel.jpg', new THREE.Vector3(0,-20,0));
+    loadTerrain('../img/sat/3_sat.jpg', '../img/rel/3_rel.jpg', new THREE.Vector3(10,-20,0));
+    loadTerrain('../img/sat/4_sat.jpg', '../img/rel/4_rel.jpg', new THREE.Vector3(20,-20,0));
 }
 
 const scene = new THREE.Scene();
@@ -113,8 +113,8 @@ function animate() {
     skybox.rotation.y += 0.00003;
     x = camera.position.x;
     y = camera.position.y;
+	  renderer.render( scene, camera );
     [minX, minY, maxX, maxY] = checkload(x, y, minX, minY, maxX, maxY);
-	renderer.render( scene, camera );
     //console.log(maxX);
 }
 animate();

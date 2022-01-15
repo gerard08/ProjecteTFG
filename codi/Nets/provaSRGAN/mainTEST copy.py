@@ -1,4 +1,4 @@
-from discriminator import Operations
+from generator import Operations
 import cv2
 import torch
 import numpy as np
@@ -18,17 +18,23 @@ def fromTensor(self):
 
 if __name__ == '__main__':
     op = Operations()
-    gen = op.createNet()
+    #gen = op.createNet()
+    gen = op.loadNet('C:/Users/ger-m/Desktop/UNI/4t/TFG/codi/Nets/provaSRGAN/models/generator_1.pth')
     #dev = op.getDevice()
     #gen.to(dev)
 
-    im = cv2.imread('C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset/sd/0.jpg')
+    im = cv2.imread('C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset/hd/25.jpg')
+    #im = cv2.normalize(im, None, alpha=1, beta=-1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
 
     it = toTensor(im)#.to(device = dev, dtype=torch.float)
-
+    cv2.imshow('original',im)
+    #cv2.waitKey(0)
     out = gen(it)
 
+    out = fromTensor(out)
+    out = cv2.normalize(out, None, 255,0, cv2.NORM_MINMAX, cv2.CV_8UC1)
+    
     print(out)
-    #cv2.imshow('result', out)
-    #print(out)
-    #cv2.waitKey(0)
+    cv2.imshow('result', out)
+    print(out)
+    cv2.waitKey(0)

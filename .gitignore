@@ -1,6 +1,4 @@
 .vscode
-3d_1/img/0.jpg
-3d_1/img/0sat.jpg
 codi/__pycache__
 informe
 minidataset
@@ -9,3 +7,15 @@ codi/Nets/definitiveRGB/__pycache__
 codi/Nets/runs
 codi/Nets/definitiveRGB/runs
 minidatasetD
+minidataset480
+dataset
+dataset.rar
+minidataset120.rar
+minidataset480.rar
+minidataset960.rar
+modelGANDISC_OLD.pth
+minidataset120
+minidataset480
+minidatasetD
+codi/Nets/provaSRGAN/models
+codi/Nets/provaSRGAN/runs

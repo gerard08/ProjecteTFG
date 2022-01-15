@@ -7,21 +7,6 @@ from DatasetDiscriminator import createDatasets
 import torch
 from tensorboardX import SummaryWriter
 import torchvision.utils as vutils
-import numpy as np
-import cv2
-
-# def accuracy(im1, im2):
-#     i1 = im1.cpu().detach().numpy()
-#     i2 = im2.cpu().detach().numpy()
-#     r = []
-#     for i in range(3):
-#         res = cv2.absdiff(i1[0][i], i2[0][i])
-#         res = res.astype(np.uint8)
-        
-#         percentage = (np.count_nonzero(res) * 100)/ res.size
-#         r.append(100 - percentage)
-#     return np.mean(np.array(r))
-
 
 def train(epoch, dataloader, model, criterion, optimizer, dev, writer):
     model.train()
@@ -35,7 +20,7 @@ def train(epoch, dataloader, model, criterion, optimizer, dev, writer):
         ground_ = sample_batched['gth'].to(device = dev, dtype=torch.float)
         n_iter = epoch*lensamples + i_batch
 
-        output_ = model(images_)
+        output_ = torch.squeeze(model(images_))
         if n_iter%100==0:
             xi = vutils.make_grid(images_, normalize=True, scale_each=True)
             writer.add_image('train/output'+ str('pred:' + str(output_) + ' gth:' + str(ground_)), xi, n_iter)
@@ -58,19 +43,47 @@ def train(epoch, dataloader, model, criterion, optimizer, dev, writer):
 
 
 if __name__ == '__main__':
-    writer = SummaryWriter('C:/Users/ger-m/Desktop/UNI/4t/TFG/codi/Nets/provaSRGAN/runs/GANDiscriminator')
+    writer = SummaryWriter('C:/Users/ger-m/Desktop/UNI/4t/TFG/codi/Nets/provaSRGAN/runs/GANDiscriminator480')
+
+    batches = 3
+
 
     op = Operations()
-    net= op.createNet(batches=3)
+    net= op.createNet(batches=batches)
     dev = op.getDevice()
     net.to(dev)
+
 
     criterion = nn.MSELoss()
     #optimizer = optim.Adam(net.parameters(), lr=1e-4, weight_decay=1e-4)
     optimizer = optim.SGD(net.parameters(), lr=0.0001)
-    training_generator = createDatasets('train', batch=3)    
+    training_generator = createDatasets('train', batch=batches)    
     
     for epoch in range(EPOCH):
         train(epoch, training_generator, net, criterion, optimizer, dev, writer)   
 
-    op.saveUnet('C:/Users/ger-m/Desktop/UNI/4t/TFG/GANDisc/model.pth')       
+    op.saveNet('modelGANDISC480.pth')       
+
+
+def entrena():
+    writer = SummaryWriter('C:/Users/ger-m/Desktop/UNI/4t/TFG/codi/Nets/provaSRGAN/runs/GANDiscriminator480')
+
+    batches = 1
+
+
+    op = Operations()
+    net= op.createNet(batches=batches)
+    dev = op.getDevice()
+    net.to(dev)
+
+
+    criterion = nn.MSELoss()
+    #optimizer = optim.Adam(net.parameters(), lr=1e-4, weight_decay=1e-4)
+    optimizer = optim.SGD(net.parameters(), lr=0.0001)
+    training_generator = createDatasets('train', batch=batches)    
+    
+    for epoch in range(EPOCH):
+        train(epoch, training_generator, net, criterion, optimizer, dev, writer)   
+
+    op.saveNet('modelGANDISC480.pth')       
+    print('guardat!!')

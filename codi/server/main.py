@@ -1,7 +1,7 @@
 from tractament import getImages
 from multiprocessing import Pool
 from cv2 import imwrite
-PATH = '3d/img/'
+PATH = '3d/img/rel/'
 
 STEP = 0.2
 th = 0.001
@@ -24,7 +24,7 @@ if __name__ == '__main__':
             xy0 = (round(x,5),round(y,5))
             xy1 = getxy1(xy0)
             im = getImages(xy0,xy1)
-            # imwrite(PATH + str(nimages) + '_sat.jpg', im)
+            imwrite(PATH + str(nimages) + '_rel.jpg', im)
             print(xy0,xy1)
             print(nimages)
             y+=STEP+th

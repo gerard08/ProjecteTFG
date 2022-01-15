@@ -1,6 +1,6 @@
 import requests
 from pyproj import Proj, transform
-SIZE = 1440
+SIZE = 120
 
 def calculaImatge(x, y, step):
     xy0 = (x,y)

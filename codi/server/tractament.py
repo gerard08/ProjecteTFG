@@ -89,12 +89,13 @@ def winSuperRes(im, div = 4):
 
 def getImages(xy0, xy1):
     (xy0,xy1) = icgc.calculateCoord(xy0, xy1)
-    im = icgc.getImage(xy0[0], xy0[1], xy1[0], xy1[1], 1440, 1440)
+    im = icgc.getImage(xy0[0], xy0[1], xy1[0], xy1[1], 120, 120, 'relleu')
 
     nparr = np.frombuffer(im, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    res = winSuperRes(img, div=6)
-    return res
+    #res = winSuperRes(img, div=6)
+    #return res
+    return img
 
 
 if __name__ == '__main__':

@@ -5,9 +5,21 @@ function hex2float($strHex) {
   $array = unpack("Gnum", $bin);
   return $array['num'];
 }
-// function sendData()
-// {
 
+//echo 'importat';
+
+
+
+if(isset($_POST['v']))
+{
+  //echo 'importat2';
+  //header("Refresh:0", url=);
+  sendData();
+}
+
+function sendData()
+{
+  //echo 'jeje';
   $x0 = strval($_POST['x0']);
   $y0 = strval($_POST['y0']);
   $step = strval($_POST['step']);
@@ -53,7 +65,6 @@ function hex2float($strHex) {
   //  }  
   $out = socket_read($socket, 4000000);
   //echo "Received: ". $out . "<br/>";  
-    
   //echo "Closing socket...<br/>";  
   socket_close($socket);  
   //echo "Closed.";  
@@ -61,11 +72,10 @@ function hex2float($strHex) {
   //echo substr($out, 0, 4); // returns FF00
   //$out = strip_tags($out);
   //echo base64_decode($out); 
-  //file_put_contents('foto.jfif', $out);
+  file_put_contents('foto.jfif', $out);
   echo $out;
+}
  ?>  
- <!-- <script type="text/javascript" src="js/terrain.js">
-   loadTerrainBinary();
-   </script> -->
+
 
      

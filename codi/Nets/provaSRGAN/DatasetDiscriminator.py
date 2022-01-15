@@ -1,4 +1,4 @@
-PATH = 'C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset/'
+PATH = 'C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset480/'
 LISTFILE = 'C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset/listfile.txt'
 
 import numpy as np
@@ -50,7 +50,7 @@ def createDatasets(type, batch):
         generator = data.DataLoader(training_set, batch_size=batch, shuffle=True)
 
     elif type == 'validate':
-        test = images[int(len(images)*0.7):]
+        test = images[int(len(images)*0.7):int(len(images)*0.8)]
         validation_set = MyDataset(test, PATH)
         generator = data.DataLoader(validation_set, batch_size=batch, shuffle=True)
 

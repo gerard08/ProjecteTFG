@@ -2,28 +2,44 @@ var tamanyImatge = 10;
 var minXcoord = 41.169, minYcoord = 1.053, maxXcoord = 42.173, maxYcoord = 2.057, step=0.2;
 //var minX = -10, minY = -10, maxX = 10, maxY = 10;
 import {loadTerrainbinary} from './terrain.js';
+// Using 'superagent' which will return a promise.
+
 function getImage(x, y, step, v)
 {
-    var result;
-    jQuery.ajax(
-        {
-            type: "POST",
-            url: '../php/callServer.php',
-            async: false,
-            //dataType: 'string',
-            // data: {x0:x ,y0:y, step:step},
-            data: "x0="+ truncate(x) +"& y0="+ truncate(y) +"& step="+ step +"& v="+ v,// + "& direction=" +direction, 
-            success: function(data){  
-                //console.log(data);
-                result = data;
+    console.log('getimage');
+    let myPromise =  new Promise(function(myResolve, myReject)
+    {
+        jQuery.ajax(
+            {
+                type: "POST",
+                url: '../php/callServer.php',
+                async: true,
+                //dataType: 'string',
+                // data: {x0:x ,y0:y, step:step},
+                data: "x0="+ truncate(x) +"& y0="+ truncate(y) +"& step="+ step +"& v="+ v,// + "& direction=" +direction, 
+                success: function(data){  
+                    myResolve(data);
+                    //console.log(data);
+                    //result = data;
+                    //document.getElementById("si").innerHTML = "<?php echo $home?>"
+                    //document.getElementById("si").innerHTML = "<?php ob_start();include 'php/callServer.php';$result = ob_get_clean();echo $result?>";
+                },
+                error: function(data){
+                    myReject('ERROR');
+                }
             }
-        }
+        );
+    });
+
+    myPromise.then(
+        function(value) {loadTerrainbinary(value, 0, v);}
     );
+    //var result;
+
     //loadTerrainbinary(result, 0, v);
     //console.log(result);
-    return result;
+    //return result;
 }
-
 
 function truncate(number, decimals = 3)
 {
@@ -57,9 +73,9 @@ function callLoad(orientation, end, varEditar, var2)
                 var v = new THREE.Vector3(noux, nouy, 0);
                 // var worker = new Worker('/js/workerJob.js');
                 // worker.postMessage({ "args": [x0, y, step, v] });
-                var img = getImage(x0, y, step, orientation, v);
+                getImage(x0, y, step, v);
                 //console.log('imatge ' + img);
-                loadTerrainbinary(img, 0, new THREE.Vector3(noux,nouy,0));
+                //loadTerrainbinary(img, 0, new THREE.Vector3(noux,nouy,0));
                 nouy += 10;
             }
             //actualitzem valors màxims
@@ -101,9 +117,7 @@ function callLoad(orientation, end, varEditar, var2)
 
 function checkload(x,y,minX,minY,maxX,maxY)
 {
-    //si canvio els 1 depenent del zoom de la camera podre carregar les files o columnes
-    //correctament
-    if(maxX - x < 1)
+    if(maxX - x < 30)
     {
         maxX = callLoad(1, true, maxX, minY);
     }

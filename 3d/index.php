@@ -1,9 +1,17 @@
 <!DOCTYPE html>
+<?php
+include 'php/callServer.php';
+	function imprimeix()
+	{
+		echo 'hey';
+	}
+?>
+
 <html>
 	<head>
 		<meta charset="utf-8">
 		<title>TFG Gerard Martínez Espelleta</title>
-		<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+		<link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico">
 		<link rel="stylesheet" href="/css/estil.css">
 		<script src="js/threejs/build/three.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">

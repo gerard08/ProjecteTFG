@@ -23,13 +23,13 @@ if __name__ == '__main__':
     #gen.to(dev)
 
     im = cv2.imread('C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset/sd/0.jpg')
-
+    #im=im/255
     it = toTensor(im)#.to(device = dev, dtype=torch.float)
-
+    
     out = gen(it)
 
     out = fromTensor(out)
 
     cv2.imshow('result', out)
-    #print(out)
+    print(out.shape)
     cv2.waitKey(0)

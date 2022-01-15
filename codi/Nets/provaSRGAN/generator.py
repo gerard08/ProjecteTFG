@@ -1,5 +1,18 @@
+from torchvision.models import vgg19
 import torch
 import torch.nn as nn
+
+
+class FeatureExtractor(nn.Module):
+    def __init__(self):
+        super(FeatureExtractor, self).__init__()
+        vgg19_model = vgg19(pretrained=True)
+        self.vgg19_54 = nn.Sequential(*list(vgg19_model.features.children())[:35])
+
+    def forward(self, img):
+        return self.vgg19_54(img)
+
+
 
 class residualBlock(nn.Module):
     def __init__(self, in_cn):
@@ -15,14 +28,14 @@ class residualBlock(nn.Module):
         x = self.ReLU(x)
         x = self.convolution(x)
         x = self.batch_norm(x)
-        return x0 + x
+        return torch.add(x, x0)#x0 + x
 
     def layerList(self):
         return [self.convolution, self.batch_norm, self.ReLU, self.convolution, self.batch_norm]
 
     
 class finalBlock(nn.Module):
-    def __init__(self, in_cn, out_cn):
+    def __init__(self, in_cn = 256//4, out_cn=256):
         super(finalBlock, self).__init__()
         self.conv = nn.Conv2d(in_channels=in_cn, out_channels=out_cn, kernel_size=3, padding=1)
         self.pixsh = nn.PixelShuffle(2)
@@ -42,17 +55,18 @@ class fullMediumStructure(nn.Module):
         super(fullMediumStructure, self).__init__()
         self.nBlocks = nBlocks
         self.residualBlock = residualBlock(in_cn)
-        self.conv = nn.Conv2d(in_cn, in_cn, kernel_size = 3, padding=1)
+        #self.rBlocks = nn.Sequential(*residualBlocks)
+        self.conv = nn.Conv2d(in_cn, in_cn, kernel_size = 3, padding=1, stride=1, bias=False)
         self.bn = nn.BatchNorm2d(in_cn)
 
     def forward(self, x):
         x0 = x
-        for i in range(self.nBlocks):
+        for _ in range(self.nBlocks):
             x = self.residualBlock(x)
-
+        #x = self.rBlocks(x)
         x = self.conv(x)
         x = self.bn(x)
-        return x0 + x
+        return torch.add(x0, x)
 
     def layerList(self):
         r = []
@@ -81,6 +95,7 @@ class generator(nn.Module):
         x = self.finalBlock(x)
         x = self.finalBlock(x)
         x = self.finalConv(x)
+
         return x
 
 
@@ -99,11 +114,18 @@ class Operations:
         torch.backends.cudnn.benchmark = True
         return device
 
-    def createNet(self, n_classes = None):
-        self.net = generator(3)
+    def createNet(self, n_classes = 3):
+        self.net = generator(n_classes)
         return self.net
 
+    def saveNet(self, namefile):
+        torch.save(self.net.state_dict(), namefile)
+        print('saved successfully')
 
+    def loadNet(self, namefile,batches = 3):
+        model = generator(batches)
+        model.load_state_dict(torch.load(namefile), strict=False)
+        return model
 
 if __name__ == '__main__':
     print('okok')

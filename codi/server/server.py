@@ -34,13 +34,14 @@ def tracta(connection, address):
         ###########CALCULEM IMATGE I LA RETORNEM############
 
         img = calculaImatge(x,y,step)#,direccio)
-        import cv2
-        file = open('original.jfif', 'wb')
-        file.write(img)
-        file.close()
+        # import cv2
+        # file = open('original.jfif', 'wb')
+        # file.write(img)
+        # file.close()
         import sys
-        myint = 12
         print(sys.getsizeof(img))
+        if sys.getsizeof(img) == 332:
+            print(img)
         connection.sendall(img)
         print("Sent data")
     except:
