@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <?php
-include 'php/callServer.php';
-	function imprimeix()
-	{
-		echo 'hey';
-	}
+//phpinfo();
+//echo 'hello?';
 ?>
 
 <html>

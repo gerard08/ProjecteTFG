@@ -2,12 +2,13 @@ import requests
 from pyproj import Proj, transform
 SIZE = 120
 
-def calculaImatge(x, y, step):
+def calculaImatge(x, y, step, tipus=None):
     xy0 = (x,y)
     xy1 = (x+step, y+step)
 
     (xy0,xy1) = calculateCoord(xy0, xy1)
-    return getImage(xy0[0], xy0[1], xy1[0], xy1[1], SIZE, SIZE)
+    size_aux = 500
+    return getImage(xy0[0], xy0[1], xy1[0], xy1[1], size_aux, size_aux, tipus)
 
 
 
@@ -29,6 +30,7 @@ def getImage(x0, y0, x1, y1, width, height, type = None):
         url = 'https://geoserveis.icgc.cat/icgc_sentinel2/wms/service?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&LAYERS=sen2rgb_201608&STYLES=&FORMAT=image/jpeg&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:25831&BBOX='
     
     query = url + str(x0) + ',' + str(y0) + ',' + str(x1) + ',' + str(y1) + '&WIDTH=' + str(width) + '&HEIGHT=' + str(height)
+    #print(query)
     try:
         x = requests.get(query)
         return x.content

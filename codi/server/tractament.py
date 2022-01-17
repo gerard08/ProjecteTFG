@@ -87,10 +87,12 @@ def winSuperRes(im, div = 4):
     return img
 
 
-def getImages(xy0, xy1):
+def getImages(xy0, xy1, relleu=0):
     (xy0,xy1) = icgc.calculateCoord(xy0, xy1)
-    im = icgc.getImage(xy0[0], xy0[1], xy1[0], xy1[1], 120, 120, 'relleu')
-
+    if relleu:
+        im = icgc.getImage(xy0[0], xy0[1], xy1[0], xy1[1], 500, 500, 'relleu')
+    else:
+        im = icgc.getImage(xy0[0], xy0[1], xy1[0], xy1[1], 960, 960)
     nparr = np.frombuffer(im, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     #res = winSuperRes(img, div=6)

@@ -29,11 +29,11 @@
            return data;
        }
 
-    function pp(plane)
-    {
-        plane.position(1,0,1);
-        return plane;
-    }
+    // function pp(plane)
+    // {
+    //     plane.position(1,0,1);
+    //     return plane;
+    // }
 
     import {scene} from './scene.js'
     function loadTerrain(imatge, relleu, position)
@@ -45,7 +45,7 @@
         var data = getHeightData(img);
         // plane
         //console.log(data);
-        var geometry = new THREE.PlaneGeometry(10,10,119,119);
+        var geometry = new THREE.PlaneGeometry(10,10,499,499);
         //geometry.position.copy(position)
         var texture = new THREE.TextureLoader().load(imatge);
         var material = new THREE.MeshBasicMaterial( { map: texture } );
@@ -60,6 +60,7 @@
         //console.log(plane.geometry.isBufferGeometry );
         //var position = plane.geometry.attributes.position;
         var l = plane.geometry.attributes.position.count;
+        //console.log(l);
         // console.log(plane.geometry.attributes.position);
         //set height of vertices
         var j = 2;
@@ -67,7 +68,7 @@
                 plane.geometry.attributes.position.array[j] = data[i]*0.035;
                 j+=3;
             }
-        console.log(plane.geometry.attributes.position);
+        //console.log(plane.geometry.attributes.position);
         // var plane = new THREE.Mesh( geometry, material );
         plane.position.copy(position);
         //plane = pp(plane);
@@ -100,12 +101,70 @@
       
     }
  
+    function getRelleu(x, y, step, v, plane)
+    {
+        //console.log(x);
+        //console.log(y);
+        //console.log('getrelleu');
+        let myPromise =  new Promise(function(myResolve, myReject)
+        {
+            jQuery.ajax(
+                {
+                    type: "POST",
+                    url: '../php/callServer.php',
+                    async: true,
+                    //dataType: 'string',
+                    // data: {x0:x ,y0:y, step:step},
+                    data: "x0="+ x +"& y0="+ y +"& step="+ step +"& v="+ v + "& type=" +1, 
+                    success: function(data){  
+                        myResolve(data);
+                        //console.log('acabat');
+                    },
+                    error: function(data){
+                        console.log('nono');
+                        myReject('ERROR');
+                    }
+                }
+            );
+        });
+        myPromise.then(
+            function(value) {loadHeightBinary(plane, value);}
+        );
+    }
 
-    function loadTerrainbinary(imatge, relleu, position)
+    function loadHeightBinary(plane, relleu)
+    {
+        console.log('okeey letsgo');
+        var rlv = new Image();
+        rlv.onload = function()
+        {
+            var data = getHeightData(rlv);
+            var l = plane.geometry.attributes.position.count;
+            //console.log(plane.geometry.attributes.position);
+            //set height of vertices
+            var j = 2;
+            for ( var i = 0; i<l; i++ ) {
+                plane.geometry.attributes.position.array[j] = data[i]*0.025;
+                //console.log(data[i]);
+                j+=3;
+            }
+            // var img = document.createElement("img");
+            // img.src = "data:image/jfif;base64,"+hexToBase64(relleu);
+            // document.body.appendChild(img);
+            // console.log('imatges posades');
+            //console.log(data);
+            
+            scene.add(plane);
+        }
+        rlv.src = "data:image/jfif;base64,"+hexToBase64(relleu);
+    }
+
+
+    function loadTerrainbinary(imatge, position, x, y, step)
     {
 
 
-        console.log('loadTerrainBinary');
+        //console.log('loadTerrainBinary');
         //console.log('terrain' + imatge);
          var texture = new THREE.Texture();
         //  var im = imatge;
@@ -113,21 +172,25 @@
          //console.log(im);
          image.onload = function() { 
              //console.log('dins');
-             //texture.image = image; 
-             //texture.needsUpdate = true; 
-            var texture = new THREE.TextureLoader().load("data:image/jfif;base64,"+hexToBase64(imatge));
-            var geometry = new THREE.PlaneGeometry(10,10,10,10);
+            texture.image = image; 
+            texture.needsUpdate = true; 
+            //var texture = new THREE.TextureLoader().load("data:image/jfif;base64,"+hexToBase64(imatge));
+            var geometry = new THREE.PlaneGeometry(10,10,499,499);
             var material = new THREE.MeshBasicMaterial( { map: texture } );
             var plane = new THREE.Mesh( geometry, material );
             plane.position.copy(position);
             //console.log('jiji');
-            scene.add(plane);
+            // scene.add(plane);
+
+            // var img = document.createElement("img");
+            // img.src = "data:image/jfif;base64,"+hexToBase64(imatge);
+            // document.body.appendChild(img);
+            // console.log('imatges posades');
+
+            getRelleu(x, y, step, position, plane);
+            //scene.add(plane);
          };
          image.src = "data:image/jfif;base64,"+hexToBase64(imatge);
-        // var img = document.createElement("img");
-        // img.src = "data:image/jfif;base64,"+hexToBase64(imatge);
-        // var src = document.getElementById("si");
-        // src.appendChild(img);
     }
 
 

@@ -16,6 +16,10 @@ if(isset($_POST['v']))
   //header("Refresh:0", url=);
   sendData();
 }
+else
+{
+  return "ERROR";
+}
 
 function sendData()
 {
@@ -24,6 +28,7 @@ function sendData()
   $y0 = strval($_POST['y0']);
   $step = strval($_POST['step']);
   $v = strval($_POST['v']);
+  $type = strval($_POST['type']);
 
   //echo $x0,' ',$y0,' ',$step,'\n';
   if(strlen($x0)<6) $x0 = '0'.$x0;
@@ -32,7 +37,7 @@ function sendData()
 
   error_reporting(E_ALL);  
   $address = gethostbyname('localhost');  
-  $service_port = 9000;  
+  $service_port = 32500;  
     
   /* Create a TCP/IP socket */  
   $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);  
@@ -51,18 +56,17 @@ function sendData()
     //echo "OK.<br/>";  
   }  
     
-  $in = $x0; 
-  socket_write($socket, $in, strlen($in));  
-  $in = $y0;  
-  socket_write($socket, $in, strlen($in));  
-  $in = $step;
-  socket_write($socket, $in, strlen($in));
-    
-  //echo "Receiving...<br/>";  
-  //  $all_out = '';  
-  //  while ($out = socket_read($socket, 1024)) {  
-  //    $all_out .= $out;  
-  //  }  
+  $in = substr($x0, 0, 15); 
+  //socket_write($socket, $in, 17);  
+  $in .= substr($y0, 0, 15); 
+  //socket_write($socket, $in, 17);  
+  $in .= substr('0.1', 0, 3);//$step, 0, 1); 
+  //socket_write($socket, $in, 3);
+  $in .= $type;
+  
+  socket_write($socket, $in, 39);
+
+
   $out = socket_read($socket, 4000000);
   //echo "Received: ". $out . "<br/>";  
   //echo "Closing socket...<br/>";  
@@ -72,7 +76,7 @@ function sendData()
   //echo substr($out, 0, 4); // returns FF00
   //$out = strip_tags($out);
   //echo base64_decode($out); 
-  file_put_contents('foto.jfif', $out);
+  //file_put_contents('foto.jfif', $out);
   echo $out;
 }
  ?>  
