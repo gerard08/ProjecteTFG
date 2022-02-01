@@ -15,7 +15,8 @@
 		<script type="module" src="js/movement.js"></script>
 		<script type="module" src="js/terrain.js"></script>
 		<script type="module" src="js/scene.js"></script>
-		<script type="module" src="js/workerJob.js"></script>
+		<script type="module" src="js/memorysaver.js"></script>
+
 		<style>
 			body { margin: 0; }
 		</style>

@@ -50,19 +50,9 @@
         var texture = new THREE.TextureLoader().load(imatge);
         var material = new THREE.MeshBasicMaterial( { map: texture } );
         var plane = new THREE.Mesh( geometry, material );
-        // //set height of vertices
-        //  for ( var i = 2; i<300; i+=3 ) {
-        //      geometry.attributes.position.array[i] = data[i]*0.001;
-        //  }
-        //console.log(plane.geometry.attributes.position);
-
-        //console.log(data.length);
-        //console.log(plane.geometry.isBufferGeometry );
-        //var position = plane.geometry.attributes.position;
-        var l = plane.geometry.attributes.position.count;
-        //console.log(l);
-        // console.log(plane.geometry.attributes.position);
+        
         //set height of vertices
+        var l = plane.geometry.attributes.position.count;
         var j = 2;
             for ( var i = 0; i<l; i++ ) {
                 plane.geometry.attributes.position.array[j] = data[i]*0.035;
@@ -71,6 +61,10 @@
         //console.log(plane.geometry.attributes.position);
         // var plane = new THREE.Mesh( geometry, material );
         plane.position.copy(position);
+        plane.name = setName(Math.round(position.x), Math.round(position.y));
+            
+        //console.log(plane.name);
+        addToList(plane.name);
         //plane = pp(plane);
         scene.add(plane);
         //console.log(geometry.attributes.position);
@@ -144,7 +138,7 @@
             //set height of vertices
             var j = 2;
             for ( var i = 0; i<l; i++ ) {
-                plane.geometry.attributes.position.array[j] = data[i]*0.025;
+                plane.geometry.attributes.position.array[j] = data[i]*0.035;
                 //console.log(data[i]);
                 j+=3;
             }
@@ -159,8 +153,8 @@
         rlv.src = "data:image/jfif;base64,"+hexToBase64(relleu);
     }
 
-
-    function loadTerrainbinary(imatge, position, x, y, step)
+    import {addToList} from "./memorysaver.js";
+    function loadTerrainbinary(imatge, position, x, y, step, xPos, yPos)
     {
 
 
@@ -186,13 +180,38 @@
             // img.src = "data:image/jfif;base64,"+hexToBase64(imatge);
             // document.body.appendChild(img);
             // console.log('imatges posades');
-
+            plane.name = setName(xPos, yPos);
+            
+            //console.log(plane.name);
+            addToList(plane.name);
             getRelleu(x, y, step, position, plane);
             //scene.add(plane);
          };
          image.src = "data:image/jfif;base64,"+hexToBase64(imatge);
     }
 
+    function setName(xPos, yPos)
+    {
+        let nx = xPos.toString();
+        if(nx.length == 2)
+        {
+            nx = '+' + nx;
+        }
+        if(nx.length == 1)
+        {
+            nx = '+0' + nx;
+        }
+        let ny = yPos.toString();
+        if(ny.length == 2)
+        {
+            ny = '+' + ny;
+        }
+        if(ny.length == 1)
+        {
+            ny = '+0' + ny;
+        }
+        return nx + ny
+    }
 
 
  export {loadTerrain, loadTerrainbinary};

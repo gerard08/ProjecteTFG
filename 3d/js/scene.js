@@ -1,4 +1,4 @@
-const SPEED = 1.7;
+const SPEED = 2.7;
 //import {camera} from "./movement.js";
 //import {FlyControls} from "./threejs/examples/js/controls/FlyControls.js";
 function createMaterialArray(filename) {
@@ -25,7 +25,7 @@ import {loadTerrain} from "./terrain.js";
 import './threejs/examples/js/controls/FlyControls.js'
 var thr = 0.15;
 var r = 1366/768;
-var minXcoord = 42.169, minYcoord = 1.453, maxXcoord = 43.569, maxYcoord = 2.953, step=0.5;
+var minXcoord, minYcoord, maxXcoord, maxYcoord;
 
 function loadInitialImages()
 {
@@ -93,15 +93,18 @@ controls.dragToLook = true;
 controls.movementSpeed = SPEED;
 controls.rollSpeed = 0.5;
 
+var tf = false;
 
-//carreguem les 9 imatges inicials
-loadInitialImages();
 
-import { checkload } from "./checkload.js";
+
+import { checkload,getCoords } from "./checkload.js";
+import { planes, checkDistance } from "./memorysaver.js";
+
 var lt = new Date();
 var x = camera.position.x;
 var y = camera.position.y;
 
+var wait = 0;
 var maxX = 20, minX = -20, maxY = 20, minY = -20;
 function animate() {
     renderer.setSize( window.innerWidth, window.innerWidth/r );
@@ -114,8 +117,33 @@ function animate() {
     skybox.rotation.y += 0.00003;
     x = camera.position.x;
     y = camera.position.y;
+    //console.log(x);
 	  renderer.render( scene, camera );
-    [minX, minY, maxX, maxY] = checkload(x, y, minX, minY, maxX, maxY);
+    if(!tf)
+    {
+      //carreguem les 9 imatges inicials
+      loadInitialImages();
+        tf = true;
+    }
+    else if(wait > 10)
+    {
+      [minX, minY, maxX, maxY] = checkload(x, y, minX, minY, maxX, maxY);
+      [minXcoord, maxXcoord, minYcoord, maxYcoord] = getCoords();
+      [minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, 60, minX, maxX, minY, maxY, 10, minXcoord, maxXcoord, minYcoord, maxYcoord, 0.1);
+    }
+    else
+    {
+      wait+=0.1;
+      //console.log(wait);
+    }
+    document.addEventListener("keydown", function(event) {
+      if(event.key == 'g')
+      {
+        console.log(planes);
+      }
+    });
+
+
     //console.log(maxX);
 }
 animate();

@@ -1,30 +1,25 @@
 var tamanyImatge = 10;
 var thr = 0.15;
 var minXcoord = 41.79500149991982, minYcoord = 1.73451324838962, maxXcoord = 42.29500149991983, maxYcoord = 2.23451324838962, step=0.1;
-//var minX = -10, minY = -10, maxX = 10, maxY = 10;
+const threshold = 50;
 import {loadTerrainbinary} from './terrain.js';
-// Using 'superagent' which will return a promise.
+import { checkDistance} from "./memorysaver.js";
 
-function getImage(x, y, step, v)
+function getImage(x, y, step, v, xPos, yPos)
 {
     //console.log('getimage');
     let myPromise =  new Promise(function(myResolve, myReject)
     {
-        console.log('cridada');
-        console.log(truncate(y, 15));
+        //console.log('cridada');
+        //console.log(truncate(y, 15));
         jQuery.ajax(
             {
                 type: "POST",
                 url: '../php/callServer.php',
-                async: true,
-                //dataType: 'string',
-                // data: {x0:x ,y0:y, step:step},
-                
+                async: true,                
                 data: "x0="+ truncate(x) +"& y0="+ truncate(y, 15) +"& step="+ step +"& v="+ v + "& type=" +0, 
-                success: function(data){  
+                success: function(data){ 
                     myResolve(data);
-                    //console.log(data);
-                    //document.getElementById("si").innerHTML = "<?php ob_start();include 'php/callServer.php';$result = ob_get_clean();echo $result?>";
                 },
                 error: function(data){
                     myReject('ERROR');
@@ -34,13 +29,8 @@ function getImage(x, y, step, v)
     });
 
     myPromise.then(
-        function(value) {loadTerrainbinary(value, v, truncate(x), truncate(y, 15), step);}
+        function(value) {loadTerrainbinary(value, v, truncate(x), truncate(y, 15), step, xPos, yPos);}
     );
-    //var result;
-
-    //loadTerrainbinary(result, 0, v);
-    //console.log(result);
-    //return result;
 }
 
 function truncate(number, decimals = 14)
@@ -51,6 +41,7 @@ function truncate(number, decimals = 14)
 }
 function callLoad(orientation, end, var1, var2)
 {
+    console.log('callload');
     //vertical
     if(orientation == 1)
     {
@@ -65,7 +56,7 @@ function callLoad(orientation, end, var1, var2)
             for(x = maxXcoord; x >= minXcoord +0.1; x -= step)
             {
                  const v = new THREE.Vector3(xPos-thr*2,yPos-thr,0);
-                 getImage(x, y, step, v);
+                 getImage(x, y, step, v, xPos, yPos);
                  yPos -= tamanyImatge;
             }
             
@@ -83,8 +74,10 @@ function callLoad(orientation, end, var1, var2)
             for(x = maxXcoord; x >= minXcoord +0.1; x -= step)
             {
                     const v = new THREE.Vector3(xPos-thr*2,yPos-thr,0);
-                    getImage(x, y, step, v);
+                    getImage(x, y, step, v, xPos, yPos);
                     yPos -= tamanyImatge;
+
+
             }
             
                 minYcoord -= step;
@@ -100,17 +93,36 @@ function callLoad(orientation, end, var1, var2)
 
 function checkload(x,y,minX,minY,maxX,maxY)
 {
+    // console.log('________________________');
+    // console.log(x, -threshold+maxX);
+    // console.log(x, minX+threshold);
     //console.log(maxX - x);
-    if((maxX - x) < 45)
+    if(x > maxX - threshold)
     {
+        //console.log(maxX - x);
+        //console.log(threshold);
+        //console.log('maxX');
         maxX = callLoad(1, true, maxX, maxY);
+        //[minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, 50, minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
+        // [minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
+        console.log('maxX: ', maxX);
     }
-    if(minX - x > -45)
+    if(x < minX+threshold)
     {
+        //console.log(mixX+x);
+        //console.log(-threshold);
+        //console.log('minX');
         minX = callLoad(1,false, minX, maxY);
+        // [minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
+        console.log('minX: ',minX);
     }
+    //[minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
     return [minX, minY, maxX, maxY]
 }
 
+function getCoords()
+{
+    return [minXcoord, maxXcoord, minYcoord, maxYcoord];
+}
 
-export {checkload, getImage};
+export {checkload, getImage, getCoords};
