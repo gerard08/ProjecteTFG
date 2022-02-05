@@ -1,9 +1,17 @@
 var tamanyImatge = 10;
 var thr = 0.15;
-var minXcoord = 41.79500149991982, minYcoord = 1.73451324838962, maxXcoord = 42.29500149991983, maxYcoord = 2.23451324838962, step=0.1;
+var minXcoord, minYcoord, maxXcoord, maxYcoord, step=0.1;
 const threshold = 50;
 import {loadTerrainbinary} from './terrain.js';
 import { checkDistance} from "./memorysaver.js";
+
+function setCoords(minXc, minYc, maxXc, maxYc)
+{
+    minXcoord = minXc;
+    minYcoord = minYc;
+    maxXcoord = maxXc;
+    maxYcoord = maxYc;
+}
 
 function getImage(x, y, step, v, xPos, yPos)
 {
@@ -41,7 +49,7 @@ function truncate(number, decimals = 14)
 }
 function callLoad(orientation, end, var1, var2)
 {
-    console.log('callload');
+    console.log('callLoad');
     //vertical
     if(orientation == 1)
     {
@@ -52,12 +60,14 @@ function callLoad(orientation, end, var1, var2)
             const y = maxYcoord;
             var yPos = var2;// + tamanyImatge;
             const xPos = var1 + tamanyImatge;
-            var x;
-            for(x = maxXcoord; x >= minXcoord +0.1; x -= step)
+            for(let x = minXcoord; x <= maxXcoord-0.01; x += step)
             {
-                 const v = new THREE.Vector3(xPos-thr*2,yPos-thr,0);
-                 getImage(x, y, step, v, xPos, yPos);
-                 yPos -= tamanyImatge;
+                console.log('????????');
+                let th = 0;
+                //yPos<0 ? th=10 : th=-10;
+                const v = new THREE.Vector3(xPos,yPos,0);
+                getImage(x, y, step, v, xPos, yPos);
+                yPos += tamanyImatge;
             }
             
              maxYcoord += step;
@@ -67,20 +77,18 @@ function callLoad(orientation, end, var1, var2)
         else
         {
             //la y és fixa
-            const y = minYcoord;
+            const y = minYcoord - step;
             var yPos = var2;// + tamanyImatge;
             const xPos = var1 - tamanyImatge;
             var x;
-            for(x = maxXcoord; x >= minXcoord +0.1; x -= step)
+            for(let x = minXcoord; x <= maxXcoord+0.01; x += step)
             {
-                    const v = new THREE.Vector3(xPos-thr*2,yPos-thr,0);
+                    const v = new THREE.Vector3(xPos,yPos,0);
                     getImage(x, y, step, v, xPos, yPos);
-                    yPos -= tamanyImatge;
-
-
+                    yPos += tamanyImatge;
             }
             
-                minYcoord -= step;
+            minYcoord -= step;
             return xPos;
         }
     }
@@ -102,7 +110,7 @@ function checkload(x,y,minX,minY,maxX,maxY)
         //console.log(maxX - x);
         //console.log(threshold);
         //console.log('maxX');
-        maxX = callLoad(1, true, maxX, maxY);
+        maxX = callLoad(1, true, maxX, minY);
         //[minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, 50, minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
         // [minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
         console.log('maxX: ', maxX);
@@ -112,7 +120,7 @@ function checkload(x,y,minX,minY,maxX,maxY)
         //console.log(mixX+x);
         //console.log(-threshold);
         //console.log('minX');
-        minX = callLoad(1,false, minX, maxY);
+        minX = callLoad(1,false, minX, minY);
         // [minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
         console.log('minX: ',minX);
     }
@@ -125,4 +133,4 @@ function getCoords()
     return [minXcoord, maxXcoord, minYcoord, maxYcoord];
 }
 
-export {checkload, getImage, getCoords};
+export {checkload, getImage, getCoords, setCoords};
