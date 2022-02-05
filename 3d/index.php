@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<?php
-//phpinfo();
-//echo 'hello?';
-?>
 
 <html>
 	<head>
