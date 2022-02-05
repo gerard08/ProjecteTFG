@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<?php
-//phpinfo();
-//echo 'hello?';
-?>
 
 <html>
 	<head>
@@ -16,9 +12,9 @@
 		<script type="module" src="js/terrain.js"></script>
 		<script type="module" src="js/scene.js"></script>
 		<script type="module" src="js/memorysaver.js"></script>
-
+		<script type="module" src="js/automate.js"></script>
 		<style>
-			body { margin: 0; }
+			body { margin: -10; }
 		</style>
 	</head>
 	<body>

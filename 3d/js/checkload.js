@@ -1,9 +1,17 @@
 var tamanyImatge = 10;
 var thr = 0.15;
-var minXcoord = 41.79500149991982, minYcoord = 1.73451324838962, maxXcoord = 42.29500149991983, maxYcoord = 2.23451324838962, step=0.1;
-const threshold = 50;
+var minXcoord, minYcoord, maxXcoord, maxYcoord, step=0.1;
+const threshold = 20;
 import {loadTerrainbinary} from './terrain.js';
 import { checkDistance} from "./memorysaver.js";
+
+function setCoords(minXc, minYc, maxXc, maxYc)
+{
+    minXcoord = minXc;
+    minYcoord = minYc;
+    maxXcoord = maxXc;
+    maxYcoord = maxYc;
+}
 
 function getImage(x, y, step, v, xPos, yPos)
 {
@@ -41,9 +49,9 @@ function truncate(number, decimals = 14)
 }
 function callLoad(orientation, end, var1, var2)
 {
-    console.log('callload');
+    //console.log('callLoad');
     //vertical
-    if(orientation == 1)
+    if(orientation == 0)
     {
         //dreta
         if(end)
@@ -52,12 +60,14 @@ function callLoad(orientation, end, var1, var2)
             const y = maxYcoord;
             var yPos = var2;// + tamanyImatge;
             const xPos = var1 + tamanyImatge;
-            var x;
-            for(x = maxXcoord; x >= minXcoord +0.1; x -= step)
+            for(let x = minXcoord; x <= maxXcoord-0.01; x += step)
             {
-                 const v = new THREE.Vector3(xPos-thr*2,yPos-thr,0);
-                 getImage(x, y, step, v, xPos, yPos);
-                 yPos -= tamanyImatge;
+                //console.log('????????');
+                let th = 0;
+                //yPos<0 ? th=10 : th=-10;
+                const v = new THREE.Vector3(xPos,yPos,0);
+                getImage(x, y, step, v, xPos, yPos);
+                yPos += tamanyImatge;
             }
             
              maxYcoord += step;
@@ -67,30 +77,68 @@ function callLoad(orientation, end, var1, var2)
         else
         {
             //la y és fixa
-            const y = minYcoord;
+            const y = minYcoord - step;
             var yPos = var2;// + tamanyImatge;
             const xPos = var1 - tamanyImatge;
             var x;
-            for(x = maxXcoord; x >= minXcoord +0.1; x -= step)
+            for(let x = minXcoord; x <= maxXcoord+0.01; x += step)
             {
-                    const v = new THREE.Vector3(xPos-thr*2,yPos-thr,0);
+                    const v = new THREE.Vector3(xPos,yPos,0);
                     getImage(x, y, step, v, xPos, yPos);
-                    yPos -= tamanyImatge;
-
-
+                    yPos += tamanyImatge;
             }
             
-                minYcoord -= step;
+            minYcoord -= step;
             return xPos;
         }
     }
     //horitzontal
-    else
+    //console.log('socdins');
+    if(orientation == 1)
     {
-
+        //amunt
+        if(end)
+        {
+            //la x és fixa
+            const x = maxXcoord;
+            const yPos = var1 + tamanyImatge;// maxY + tamanyImatge
+            var xPos = var2;//minX
+            for(let y = minYcoord; y <= maxYcoord-0.01; y += step)
+            {
+                //console.log('amuntdins');
+                //let th = 0;
+                //yPos<0 ? th=10 : th=-10;
+                const v = new THREE.Vector3(xPos,yPos,0);
+                getImage(x, y, step, v, xPos, yPos);
+                xPos += tamanyImatge;
+            }
+            
+             maxXcoord += step;
+            return yPos;
+        }
+        else
+        {
+            console.log('aqui aqui');
+            //la x és fixa
+            const x = minXcoord - step;
+            const yPos = var1 - tamanyImatge;// maxY + tamanyImatge
+            var xPos = var2;//minX
+            for(let y = minYcoord; y <= maxYcoord-0.01; y += step)
+            {
+                //console.log('avalldins');
+                //let th = 0;
+                //yPos<0 ? th=10 : th=-10;
+                const v = new THREE.Vector3(xPos,yPos,0);
+                getImage(x, y, step, v, xPos, yPos);
+                xPos += tamanyImatge;
+            }
+            
+             minXcoord -= step;
+            return yPos;
+        }
     }
 }
-
+//var xyz;
 function checkload(x,y,minX,minY,maxX,maxY)
 {
     // console.log('________________________');
@@ -99,22 +147,27 @@ function checkload(x,y,minX,minY,maxX,maxY)
     //console.log(maxX - x);
     if(x > maxX - threshold)
     {
-        //console.log(maxX - x);
-        //console.log(threshold);
-        //console.log('maxX');
-        maxX = callLoad(1, true, maxX, maxY);
-        //[minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, 50, minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
+        maxX = callLoad(0, true, maxX, minY);
         // [minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
-        console.log('maxX: ', maxX);
+        //console.log('maxX: ', maxX);
     }
     if(x < minX+threshold)
     {
-        //console.log(mixX+x);
-        //console.log(-threshold);
-        //console.log('minX');
-        minX = callLoad(1,false, minX, maxY);
+        minX = callLoad(0,false, minX, minY);
         // [minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
-        console.log('minX: ',minX);
+        //console.log('minX: ',minX);
+    }
+    //console.log(y, maxY - threshold);
+    
+    if(y > maxY - threshold)
+    {
+        //console.log('amuntfora');
+        //maxY = callLoad(1, true, maxY, minX);
+    }
+    if(y < minY + threshold)
+    {
+        minY = callLoad(1, false, minY, minX);
+        //console.log('avall');
     }
     //[minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
     return [minX, minY, maxX, maxY]
@@ -125,4 +178,4 @@ function getCoords()
     return [minXcoord, maxXcoord, minYcoord, maxYcoord];
 }
 
-export {checkload, getImage, getCoords};
+export {checkload, getImage, getCoords, setCoords};

@@ -43,7 +43,7 @@ def tracta(connection, address):
         
         import sys
         #print(sys.getsizeof(img))
-        if sys.getsizeof(img) == 332:
+        if sys.getsizeof(img) <= 332:
             print(img)
         connection.sendall(img)
         #print("Sent data")

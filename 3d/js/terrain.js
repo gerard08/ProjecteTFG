@@ -138,7 +138,7 @@
             //set height of vertices
             var j = 2;
             for ( var i = 0; i<l; i++ ) {
-                plane.geometry.attributes.position.array[j] = data[i]*0.035;
+                plane.geometry.attributes.position.array[j] = data[i]*0.030;//0.035
                 //console.log(data[i]);
                 j+=3;
             }
