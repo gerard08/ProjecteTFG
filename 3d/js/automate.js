@@ -10,11 +10,11 @@ function loadInitialImages(x0, y0, step, nrowcols = 5)
     let yPos = -20;
     let x = x0
     let y = y0
-    console.log('imatges demanades');
+    //console.log('imatges demanades');
     for(let i = 0; i < nrowcols; i++)
     {
         for(let j = 0; j < nrowcols; j++)
-        {console.log(i*10 + j);
+        {//console.log(i*10 + j);
             // let thx;
             // let thy;
             // yPos<0 ? thy=0.01 : thy=-0.01;

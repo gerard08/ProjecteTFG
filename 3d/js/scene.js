@@ -142,7 +142,7 @@ function animate() {
     y = camera.position.y;
     //console.log(x);
 	  renderer.render( scene, camera );
-    if(!loaded && planes.length >= 25)
+    if(!loaded && planes.length >= 26)
     {
       //console.log(planes);
       showInstructions();

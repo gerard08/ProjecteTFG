@@ -16,7 +16,7 @@ function setCoords(minXc, minYc, maxXc, maxYc)
 
 function getImage(x, y, step, v, xPos, yPos)
 {
-    console.log('getimage');
+    //console.log('getimage');
     let myPromise =  new Promise(function(myResolve, myReject)
     {
         //console.log('cridada');
