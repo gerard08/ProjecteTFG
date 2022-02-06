@@ -18,6 +18,9 @@
 		</style>
 	</head>
 	<body>
-		<div id="si"></div>
+		<div id="loading"><?php include_once "php/views/loadingScreen.php" ?></div>
+		<div id="contingut">
+			<div id="instructions"><?php include_once "php/views/instructions.php" ?></div>
+		</div>
 	</body>
 </html>

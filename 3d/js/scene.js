@@ -26,6 +26,20 @@ import './threejs/examples/js/controls/FlyControls.js'
 var thr = 0.15;
 var r = 1366/768;
 var minXcoord, minYcoord, maxXcoord, maxYcoord;
+var loaded = false;
+
+function setCoordssc(minx, miny, maxx, maxy)
+{
+  minXcoord = minx;
+  minYcoord = miny;
+  maxXcoord = maxx;
+  maxYcoord = maxy;
+}
+
+function setLoaded(val) 
+{
+  loaded = val; 
+}
 
 // function loadInitialImages()
 // {
@@ -66,7 +80,7 @@ var minXcoord, minYcoord, maxXcoord, maxYcoord;
 //  }
 
 const scene = new THREE.Scene();
-export {scene};//, minXcoord, minYcoord, maxXcoord, maxYcoord, step};
+export {scene, setLoaded};//, minXcoord, minYcoord, maxXcoord, maxYcoord, step};
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 1000 );
 camera.position.x = -11.775746208539871;
 camera.position.y = 14.073959230583132;
@@ -74,9 +88,15 @@ camera.position.z = 1.8646209895441097;
 camera.rotation.x = 90 * Math.PI / 180
 camera.rotation.y = 180 * Math.PI / 180
 
+import {showLoad, showInstructions} from "./interface.js"
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+showLoad();
+
+///document.body.appendChild( renderer.domElement );
+
+//export {renderer, setCoordssc};
+//showLoad();
 
 const skyboxImage = 'miramar';
 const materialArray = createMaterialArray(skyboxImage);
@@ -102,6 +122,7 @@ var tf = false;
 import { checkload,getCoords,setCoords } from "./checkload.js";
 import { planes, checkDistance } from "./memorysaver.js";
 import {loadInitialImages} from "./automate.js";
+//import {ControlLoadingState} from "./interface.js";
 var lt = new Date();
 var x = camera.position.x;
 var y = camera.position.y;
@@ -121,24 +142,32 @@ function animate() {
     y = camera.position.y;
     //console.log(x);
 	  renderer.render( scene, camera );
+    if(!loaded && planes.length >= 25)
+    {
+      //console.log(planes);
+      showInstructions();
+      document.getElementById("contingut").appendChild(renderer.domElement).setAttribute("class", "visor");
+      //document.body.appendChild( renderer.domElement );
+      loaded = true;
+    }
     if(!tf)
     {
+      console.log('tf');
       //carreguem les 9 imatges inicials
+      //ControlLoadingState(41.79500149991982, 1.7345132483896197, 0.1);
       [minXcoord, minYcoord, maxXcoord, maxYcoord] = loadInitialImages(41.79500149991982, 1.7345132483896197, 0.1);
       setCoords(minXcoord, minYcoord, maxXcoord, maxYcoord);
       tf = true;
     }
-    else if(wait > 10)
+    else if(loaded)
     {
+      //console.log('ja esta loaded');
       [minX, minY, maxX, maxY] = checkload(x, y, minX, minY, maxX, maxY);
       [minXcoord, maxXcoord, minYcoord, maxYcoord] = getCoords();
       //[minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, 60, minX, maxX, minY, maxY, 10, minXcoord, maxXcoord, minYcoord, maxYcoord, 0.1);
     }
-    else
-    {
-      wait+=0.1;
-      //console.log(wait);
-    }
+
+    //debug
     document.addEventListener("keydown", function(event) {
       if(event.key == 'g')
       {

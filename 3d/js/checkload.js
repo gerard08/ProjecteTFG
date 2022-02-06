@@ -2,6 +2,7 @@ var tamanyImatge = 10;
 var thr = 0.15;
 var minXcoord, minYcoord, maxXcoord, maxYcoord, step=0.1;
 const threshold = 20;
+const delTH = 30;
 import {loadTerrainbinary} from './terrain.js';
 import { checkDistance} from "./memorysaver.js";
 
@@ -15,7 +16,7 @@ function setCoords(minXc, minYc, maxXc, maxYc)
 
 function getImage(x, y, step, v, xPos, yPos)
 {
-    //console.log('getimage');
+    console.log('getimage');
     let myPromise =  new Promise(function(myResolve, myReject)
     {
         //console.log('cridada');
@@ -31,6 +32,7 @@ function getImage(x, y, step, v, xPos, yPos)
                 },
                 error: function(data){
                     myReject('ERROR');
+                    console.log(data);
                 }
             }
         );
@@ -141,20 +143,17 @@ function callLoad(orientation, end, var1, var2)
 //var xyz;
 function checkload(x,y,minX,minY,maxX,maxY)
 {
-    // console.log('________________________');
-    // console.log(x, -threshold+maxX);
-    // console.log(x, minX+threshold);
-    //console.log(maxX - x);
+
     if(x > maxX - threshold)
     {
         maxX = callLoad(0, true, maxX, minY);
-        // [minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
+        //[minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, delTH, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
         //console.log('maxX: ', maxX);
     }
     if(x < minX+threshold)
     {
         minX = callLoad(0,false, minX, minY);
-        // [minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, threshold, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
+        //[minX, maxX, minY, maxY, minXcoord, maxXcoord, minYcoord, maxYcoord] = checkDistance(x, y, delTH, minX, maxX, minY, maxY, tamanyImatge, minXcoord, maxXcoord, minYcoord, maxYcoord, step);
         //console.log('minX: ',minX);
     }
     //console.log(y, maxY - threshold);
