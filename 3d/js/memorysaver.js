@@ -17,10 +17,10 @@ function rmFromList(index)
     //console.log(planes);
 }
 
-var borrat = null;
+//var borrat = null;
 function checkDistance(xcam, ycam, range, xmin, xmax, ymin, ymax,tamanyImatge, xcoordmin, xcoordmax, ycoordmin, ycoordmax, step)
 {
-    //let borrat = null;
+    let borrat = null;
     planes.forEach(function(elemento, indice, array) {
 
         //obtenim les coordenades del pla del seu nom

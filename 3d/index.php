@@ -3,8 +3,8 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>TFG Gerard Martínez Espelleta</title>
-		<link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico">
+		<title>Visualització, creació i millora de terrenys 3D</title>
+		<link rel="shortcut icon" type="image/x-icon" href="./img/logo.ico">
 		<link rel="stylesheet" href="/css/estil.css">
 		<script src="js/threejs/build/three.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">

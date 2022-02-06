@@ -1,4 +1,4 @@
-const SPEED = 2.7;
+const SPEED = 1.7;
 //import {camera} from "./movement.js";
 //import {FlyControls} from "./threejs/examples/js/controls/FlyControls.js";
 function createMaterialArray(filename) {
@@ -142,7 +142,7 @@ function animate() {
     y = camera.position.y;
     //console.log(x);
 	  renderer.render( scene, camera );
-    if(!loaded && planes.length >= 26)
+    if(!loaded && planes.length >= 20)
     {
       //console.log(planes);
       showInstructions();

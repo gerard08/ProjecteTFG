@@ -6,11 +6,44 @@ body {
   }
 
   /*pantalla de carrega*/
+
+  @keyframes animaInici {
+    from {/*width:0%;*/ opacity:0;}
+    to {/*width:40%;*/ opacity:1;}
+  }
+
+.loadScreen 
+{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  animation-name: animaInici;
+  animation-duration: 4s;
+}
+
+#logo
+{
+  position: absolute;
+  margin-top: 15%;
+  width: 40%;
+}
+
+#titolTFG
+{
+  position: absolute;
+  margin-top: 55%;
+  font-size: 270%;
+}
+
   .loader-5 {
+    position: absolute;
     height: 32px;
     width: 32px;
-    margin-top: 40%;
-    margin-left: 48%;
+    margin-top: 80%;
+    margin-left: 0%;
     -webkit-animation: loader-5-1 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
             animation: loader-5-1 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
   }
@@ -261,3 +294,4 @@ body {
   font-size: 110%;
   margin-left: 10%;
 }
+
