@@ -1,5 +1,6 @@
-PATH = 'C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset/'
-LISTFILE = 'C:/Users/ger-m/Desktop/UNI/4t/TFG/minidataset/listfile.txt'
+PATH_SD = '../input/dataset120/minidataset120/hd/'
+PATH_HD = '../input/minidataset480/minidataset480/hd/'
+LISTFILE = '../input/minidataset480/minidataset480/listfile.txt'
 
 import numpy as np
 from torch.utils import data
@@ -7,17 +8,18 @@ import cv2
 
 
 class MyDataset(data.Dataset):
-    def __init__(self, lst, path):
+    def __init__(self, lst):
         self.lst = lst
-        self.path = path
 
     def __getitem__(self, index):
         
-        imsd = 'sd/' + self.lst[index]
-        imhd = 'hd/' + self.lst[index]
+        img = self.lst[index]
         
-        x = cv2.imread(self.path + imsd)/255.0
-        y = cv2.imread(self.path + imhd)/255.0
+        x = cv2.imread(PATH_SD + img)
+        y = cv2.imread(PATH_HD + img)
+        
+        x = cv2.normalize(x, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
+        y = cv2.normalize(y, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
 
         x = np.transpose(x,(2,0,1))
         y = np.transpose(y,(2,0,1))
@@ -33,17 +35,16 @@ def createDatasets(type, batch):
     images = f.read()
     images = images.split("\n")
     f.close()
-
     generator = None
 
     if type == 'train':
-        train = images[:int(len(images)*0.7)]
-        training_set = MyDataset(train, PATH)
+        train = images[:int(len(images)*0.7)]#0.7
+        training_set = MyDataset(train)
         generator = data.DataLoader(training_set, batch_size=batch, shuffle=True)
 
     elif type == 'validate':
         test = images[int(len(images)*0.7):]
-        validation_set = MyDataset(test, PATH)
+        validation_set = MyDataset(test)
         generator = data.DataLoader(validation_set, batch_size=batch, shuffle=True)
 
     if generator is None:

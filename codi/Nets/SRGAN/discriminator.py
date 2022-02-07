@@ -28,7 +28,7 @@ class discriminator(nn.Module):
         self.block5 = block(256, 256, 2)
         self.block6 = block(256, 512, 1)
         self.block7 = block(512, 512, 2)
-        self.dense1 = nn.Linear(24576, 1024)
+        self.dense1 = nn.Linear(373248, 1024)
         self.dense2 = nn.Linear(1024, 1)
         self.sigmoid = nn.Sigmoid()
 
@@ -53,7 +53,7 @@ class discriminator(nn.Module):
 #################ZONA PROVES#################
 
 
-class Operations:
+class DiscOps:
     def __init__(self):
         pass
 
@@ -72,8 +72,8 @@ class Operations:
         print('saved successfully')
 
     def loadNet(self, namefile,batches = 3):
-        model = discriminator(3, batches)
-        model.load_state_dict(torch.load(namefile))
+        model = discriminator(batches)
+        model.load_state_dict(torch.load(namefile), strict=False)
         return model
 
 

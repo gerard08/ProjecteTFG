@@ -13,6 +13,7 @@ class FeatureExtractor(nn.Module):
         return self.vgg19_54(img)
 
 
+
 class residualBlock(nn.Module):
     def __init__(self, in_cn):
         super(residualBlock, self).__init__()
@@ -27,14 +28,14 @@ class residualBlock(nn.Module):
         x = self.ReLU(x)
         x = self.convolution(x)
         x = self.batch_norm(x)
-        return x0 + x
+        return torch.add(x, x0)#x0 + x
 
     def layerList(self):
         return [self.convolution, self.batch_norm, self.ReLU, self.convolution, self.batch_norm]
 
-    
+
 class finalBlock(nn.Module):
-    def __init__(self, in_cn, out_cn):
+    def __init__(self, in_cn = 256//4, out_cn=256):
         super(finalBlock, self).__init__()
         self.conv = nn.Conv2d(in_channels=in_cn, out_channels=out_cn, kernel_size=3, padding=1)
         self.pixsh = nn.PixelShuffle(2)
@@ -45,26 +46,27 @@ class finalBlock(nn.Module):
         x = self.pixsh(x)
         x = self.ReLU(x)
         return x
-    
+
     def layerList(self):
         return [self.conv, self.pixsh, self.ReLU]
 
 class fullMediumStructure(nn.Module):
     def __init__(self, nBlocks, in_cn):
         super(fullMediumStructure, self).__init__()
-        self.nBlocks = nBlocks
-        self.residualBlock = residualBlock(in_cn)
-        self.conv = nn.Conv2d(in_cn, in_cn, kernel_size = 3, padding=1)
+        #self.nBlocks = nBlocks
+        residualBlocks = []
+        for _ in range(nBlocks):
+            residualBlocks.append(residualBlock(in_cn))
+        self.rBlocks = nn.Sequential(*residualBlocks)
+        self.conv = nn.Conv2d(in_cn, in_cn, kernel_size = 3, padding=1, stride=1, bias=False)
         self.bn = nn.BatchNorm2d(in_cn)
 
     def forward(self, x):
         x0 = x
-        for i in range(self.nBlocks):
-            x = self.residualBlock(x)
-
+        x = self.rBlocks(x)
         x = self.conv(x)
         x = self.bn(x)
-        return x0 + x
+        return torch.add(x0, x)
 
     def layerList(self):
         r = []
@@ -83,7 +85,7 @@ class generator(nn.Module):
 
         self.mediumBlock = fullMediumStructure(nBlocks=16, in_cn=64)
         self.finalBlock = finalBlock(in_cn=64, out_cn=256)
-        self.finalBlock2 = finalBlock(in_cn=256, out_cn=256)
+        #self.finalBlock2 = finalBlock(in_cn=256, out_cn=256)
         self.finalConv = nn.Conv2d(in_channels=64, out_channels=3, kernel_size=9, padding=4)
 
     def forward(self, x):
@@ -93,6 +95,7 @@ class generator(nn.Module):
         x = self.finalBlock(x)
         x = self.finalBlock(x)
         x = self.finalConv(x)
+
         return x
 
 
@@ -101,7 +104,7 @@ class generator(nn.Module):
 #################ZONA PROVES#################
 
 
-class Operations:
+class GenOps:
     def __init__(self):
         pass
 
@@ -120,8 +123,8 @@ class Operations:
         print('saved successfully')
 
     def loadNet(self, namefile,batches = 3):
-        model = generator(3, batches)
-        model.load_state_dict(torch.load(namefile))
+        model = generator(batches)
+        model.load_state_dict(torch.load(namefile), strict=False)
         return model
 
 if __name__ == '__main__':
