@@ -5,9 +5,10 @@ En aquest treball farem ús de tècniques de Deep Learning per a crear una xarxa
 
 ## Estructura del repositori
 
-Aquest repositori està dividit en tres carpetes principals:
+Aquest repositori està dividit en quatre carpetes principals:
 <ol>
 <li>Una primera anomenada "3d", ón es troben tots els documents que formen el nostre visor web.
 <li>Una segona anomenada "codi" ón podrem trobar tots els arxius referents a la creació, entrenament i avaluació de xarxes neuronals, juntament amb els arxius del servidor
 <li>Una tercera anomenada "informe", ón podem veure l'informe generat així com totes les imatges mencionades en aquest.
+<li>Una quarta anomenada "informes de seguiment" en la que podrem veure versions anteriors de l'informe final
 </ol>
