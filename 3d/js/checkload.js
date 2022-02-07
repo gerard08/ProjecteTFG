@@ -162,7 +162,7 @@ function checkload(x,y,minX,minY,maxX,maxY)
     if(y > maxY - threshold)
     {
         //console.log('amuntfora');
-        //maxY = callLoad(1, true, maxY, minX);
+        maxY = callLoad(1, true, maxY, minX);
     }
     if(y < minY + threshold)
     {
