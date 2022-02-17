@@ -17,10 +17,10 @@ function rmFromList(index)
     //console.log(planes);
 }
 
-var borrat = null;
+//var borrat = null;
 function checkDistance(xcam, ycam, range, xmin, xmax, ymin, ymax,tamanyImatge, xcoordmin, xcoordmax, ycoordmin, ycoordmax, step)
 {
-    //let borrat = null;
+    let borrat = null;
     planes.forEach(function(elemento, indice, array) {
 
         //obtenim les coordenades del pla del seu nom
@@ -56,36 +56,6 @@ function checkDistance(xcam, ycam, range, xmin, xmax, ymin, ymax,tamanyImatge, x
                 borrat = x;
             }
         }
-
-                //comprobem l'eix Y
-                if(ycam < 0 && ycam + range < y)
-                {
-                    //console.log('xcam+range ',xcam + range, ' <x ', x);
-                    console.log('%c Borrat dreta ', 'background: #ffff; color: #f00');
-                    rmFromList(indice);
-                    if(borrat != x)
-                    {
-                        //decrementem valor de Xmax
-                        xmax = xmax - tamanyImatge;
-                        xcoordmax = xcoordmax - step;
-                        console.log('nou xmax = ', xmax);
-                        borrat = x;
-                    }
-                }
-                else if(ycam >=0 && (ycam - range) > y)
-                {
-                    //console.log('xcam-range ',(xcam - range), ' >x ', x);
-                    console.log('%c Borrat esquerra ', 'background: #ffff; color: #00b');
-                    rmFromList(indice);
-                    if(borrat != x)
-                    {
-                        //incrementem valor Xmin
-                        xmin = xmin + tamanyImatge;
-                        xcoordmin = xcoordmin + step;
-                        console.log('nou xmin = ', xmin);
-                        borrat = x;
-                    }
-                }
     });
 
 

@@ -99,7 +99,7 @@
     {
         //console.log(x);
         //console.log(y);
-        //console.log('getrelleu');
+        console.log('getrelleu');
         let myPromise =  new Promise(function(myResolve, myReject)
         {
             jQuery.ajax(
@@ -134,7 +134,6 @@
         {
             var data = getHeightData(rlv);
             var l = plane.geometry.attributes.position.count;
-            //console.log(plane.geometry.attributes.position);
             //set height of vertices
             var j = 2;
             for ( var i = 0; i<l; i++ ) {
@@ -142,12 +141,6 @@
                 //console.log(data[i]);
                 j+=3;
             }
-            // var img = document.createElement("img");
-            // img.src = "data:image/jfif;base64,"+hexToBase64(relleu);
-            // document.body.appendChild(img);
-            // console.log('imatges posades');
-            //console.log(data);
-            
             scene.add(plane);
         }
         rlv.src = "data:image/jfif;base64,"+hexToBase64(relleu);
@@ -168,24 +161,13 @@
              //console.log('dins');
             texture.image = image; 
             texture.needsUpdate = true; 
-            //var texture = new THREE.TextureLoader().load("data:image/jfif;base64,"+hexToBase64(imatge));
             var geometry = new THREE.PlaneGeometry(10,10,499,499);
             var material = new THREE.MeshBasicMaterial( { map: texture } );
             var plane = new THREE.Mesh( geometry, material );
             plane.position.copy(position);
-            //console.log('jiji');
-            // scene.add(plane);
-
-            // var img = document.createElement("img");
-            // img.src = "data:image/jfif;base64,"+hexToBase64(imatge);
-            // document.body.appendChild(img);
-            // console.log('imatges posades');
             plane.name = setName(xPos, yPos);
-            
-            //console.log(plane.name);
             addToList(plane.name);
             getRelleu(x, y, step, position, plane);
-            //scene.add(plane);
          };
          image.src = "data:image/jfif;base64,"+hexToBase64(imatge);
     }
