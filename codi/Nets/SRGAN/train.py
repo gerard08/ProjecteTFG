@@ -117,7 +117,7 @@ for epoch in range(opt.epoch, opt.n_epochs):
         optimizer_G.step()
 
         # ---------------------
-        #  Train Terminator
+        #  Train Discriminator
         # ---------------------
 
         optimizer_D.zero_grad()
